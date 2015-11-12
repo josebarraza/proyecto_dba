@@ -1,1 +1,0 @@
-postgresql-9.3.10-1-windows-x64.exe --mode unattended --superpassword lola00 --servicepassword lola00 --serverport 5433 --unattendedmodeui none --prefix "C:\postgres" --datadir "C:\postgres\data"

@@ -18,8 +18,8 @@ public class Ventana extends JFrame implements ActionListener{
 	JMenu menu;
         JMenuItem btnInicio;
 	JMenuItem btnInstalar;
-	JTextField txtPassword;
-	JTextField txtRepassword;
+	JPasswordField txtPassword;
+	JPasswordField txtRepassword;
 	JTextField txtPuerto;
 	JTextField txtDir1;
 	JTextField txtDir2;
@@ -39,7 +39,7 @@ public class Ventana extends JFrame implements ActionListener{
 	
 	public void interfaz(){
                 setTitle("Sistema");
-		setSize(750,550);
+		setSize(300,300);
                 setLocationRelativeTo(null);
 		setDefaultCloseOperation(3);
 		//Todo este bloque tiene que ver con el Menu.
@@ -70,10 +70,10 @@ public class Ventana extends JFrame implements ActionListener{
                 paneles[1].add(new JLabel("Instalador:"));
                 paneles[1].add(botonChooser);
                
-		txtPassword = new JTextField(20); 
+		txtPassword = new JPasswordField(20); 
                 paneles[1].add(new JLabel("Super password:")); 
                 paneles[1].add(txtPassword);
-		txtRepassword = new JTextField(20); 
+		txtRepassword = new JPasswordField(20); 
                 paneles[1].add(new JLabel("Service password:"));
                 paneles[1].add(txtRepassword);
                 
@@ -138,7 +138,7 @@ public class Ventana extends JFrame implements ActionListener{
                             wr.append(" --datadir "+ '"'+txtDir2.getText()+'"'); //Ruta de datos
                             wr.close();
                             bw.close();
-                            JOptionPane.showMessageDialog(null,"Archivo creado correctamente, espere un momento para la instalación...");
+                            JOptionPane.showMessageDialog(null,"Archivo creado correctamente...");
                             
                             //Limpiamos 
                             botonChooser.setText("Examinar");
@@ -150,7 +150,9 @@ public class Ventana extends JFrame implements ActionListener{
                             txtDir2.setText("");
                             
 
-                         }catch(IOException ioe){}
+                         }catch(IOException ioe){
+                             JOptionPane.showMessageDialog(null,"Error asegures llenar todos los campos...");
+                         }
         
                         
 		}
