@@ -13,7 +13,7 @@ public class ProyectoDBA {
 
    
    public static void main(String [] arg) {
-    new Ventana();
+        new Ventana();
     
    }
    public  void escribir(String nombreArchivo)
@@ -30,7 +30,7 @@ public class ProyectoDBA {
           wr.close();
           bw.close();
 
-        }catch(IOException e){};
+        }catch(IOException e){}
         }
    public void ejecutaBAT(){
         Runtime aplicacion = Runtime.getRuntime(); 

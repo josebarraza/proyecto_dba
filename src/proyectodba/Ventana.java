@@ -14,112 +14,146 @@ import java.io.*;
 import javax.swing.*;
 
 public class Ventana extends JFrame implements ActionListener{
-	JLabel Bienvenido;
 	JMenuBar BarraMenu;
 	JMenu menu;
-	JMenuItem instalarPosgres;
-	JTextField contraseña1;
-	JTextField contraseña2;
-	JComboBox puertos;
-	String [] listaPuertos={"5430","5341","5432"}; 
-	JTextField dir1;
-	JTextField dir2;
-	JPanel panelBienvenida;
-	JPanel panelComponentes;
+        JMenuItem btnInicio;
+	JMenuItem btnInstalar;
+	JTextField txtPassword;
+	JTextField txtRepassword;
+	JTextField txtPuerto;
+	JTextField txtDir1;
+	JTextField txtDir2;
+	JPanel[] paneles;
+        int posicion;
 	
-	JButton boton;
+	
+	JButton btnEnviar;
 	JButton botonChooser;
-	JLabel etcontraseña1;
-	JLabel etcontraseña2;
-	JLabel etpuertos;
-	JLabel etdir1;
-	JLabel etdir2;
-	File f;
+	File f,ejecutable;
 	JFileChooser archivo;
         
 	public Ventana(){
-		setTitle("Sistema");
-		
+		interfaz();
+                escuchas();	
+	}
+	
+	public void interfaz(){
+                setTitle("Sistema");
 		setSize(750,550);
-		//setResizable(false);
-		
+                setLocationRelativeTo(null);
 		setDefaultCloseOperation(3);
 		//Todo este bloque tiene que ver con el Menu.
 		BarraMenu = new JMenuBar();
-		menu = new JMenu("Elige...");
-		instalarPosgres= new JMenuItem("Instalar...");
-		instalarPosgres.addActionListener(this);		
-		menu.add(instalarPosgres);
+		menu = new JMenu("Menú");
+		btnInstalar= new JMenuItem("Instalar Postgres");
+                btnInicio= new JMenuItem("Inicio");
+		
+                menu.add(btnInicio);
+		menu.add(btnInstalar);
 		BarraMenu.add(menu);
-			
-		//Acaba bloque Menu ****
-		panelBienvenida = new JPanel();	
-		Bienvenido = new JLabel("BIENVENIDO AL PROGRAMA");
+                /***/
+                //Paneles
+		paneles = new JPanel[10];
+                paneles[0] = new JPanel();
+                paneles[1] = new JPanel();
+                paneles[1].setSize(300, 400);
+                paneles[1].setLayout(new GridLayout(7,2)) ;
+               
 		
-		panelBienvenida.add(Bienvenido);
-		add(panelBienvenida);
+		paneles[0].add(new JLabel("Bienvenido al sistema"));
+		add(paneles[0]);
+                posicion = 0;
 		setJMenuBar(BarraMenu);
-		//panelBienvenida.setVisible(true);	
-		setVisible(true);
+                
+                //***PANEL 1 = INSTALAR POSTGRES
+                botonChooser = new JButton("Examinar");
+                paneles[1].add(new JLabel("Instalador:"));
+                paneles[1].add(botonChooser);
+               
+		txtPassword = new JTextField(20); 
+                paneles[1].add(new JLabel("Super password:")); 
+                paneles[1].add(txtPassword);
+		txtRepassword = new JTextField(20); 
+                paneles[1].add(new JLabel("Service password:"));
+                paneles[1].add(txtRepassword);
+                
+                txtPuerto = new JTextField();
+                paneles[1].add(new JLabel("Puerto:"));
+                paneles[1].add(txtPuerto);
+                
+                paneles[1].add(new JLabel("Ruta de instalación:"));
+                txtDir1 = new JTextField();
+                paneles[1].add(txtDir1);
+                paneles[1].add(new JLabel("Ruta de datos:"));
+                txtDir2 = new JTextField();
+                paneles[1].add(txtDir2);
+                btnEnviar = new JButton("CREAR .BAT");   
+                paneles[1].add(btnEnviar);
+              
 			
-		
-	}
-	
-	
+		setVisible(true);
+                
+        }
+        public void escuchas(){
+                btnInstalar.addActionListener(this);	
+                btnInicio.addActionListener(this);
+                botonChooser.addActionListener(this); 
+                btnEnviar.addActionListener(this);
+        }
 	
 	public void actionPerformed(ActionEvent e) {
 	
-		panelComponentes = new JPanel();
-		String path="";
-		panelComponentes.setLayout(new GridLayout(14,2)) ;
-		
-		
-	
-		if(e.getSource() == instalarPosgres){
+		//Opcion instalar postgres
+		if(e.getSource() == btnInstalar){
 			
-			
-			panelBienvenida.setVisible(false);
-			
-			botonChooser = new JButton("Agrega Ruta del archivo .exe");
-			botonChooser.addActionListener(this); 
-			panelComponentes.add(botonChooser);
-			//agrego la etiqueta y la caja de texto al panel en una sola línea.
-			etcontraseña1 = new JLabel(" Contraseña:  "); contraseña1 = new JTextField(20); panelComponentes.add(etcontraseña1); panelComponentes.add(contraseña1);
-			etcontraseña2 = new JLabel("Contraseña2: "); contraseña2 = new JTextField(20); panelComponentes.add(etcontraseña2);panelComponentes.add(contraseña2);
-			
-			puertos = new JComboBox<Object>(listaPuertos); etpuertos = new JLabel("Puertos: ");panelComponentes.add(etpuertos) ;panelComponentes.add(puertos); 
-			
-			etdir1 = new JLabel("Dirección 1: "); dir1= new JTextField(20); panelComponentes.add(etdir1); panelComponentes.add(dir1);
-			etdir2 = new JLabel("Dirección 2: ");	dir2= new JTextField(20); panelComponentes.add(etdir2); panelComponentes.add(dir2);
-			boton = new JButton("Crear archivo"); boton.addActionListener(this); panelComponentes.add(boton);
-			panelComponentes.setSize(400, 400);
-			add(panelComponentes);
+			this.remove(paneles[posicion]);
+                        posicion = 1;
+			add(paneles[posicion]);
+                         validate();
+                        repaint();
 		}
-		if( boton == e.getSource()){
-			File a =  archivo.getSelectedFile();
-			path= a.getAbsolutePath();
-			try{
-				//Cambiale esta ruta por la de tu compu, se guardara allí el archivo.
-				f = new File("C:\\"
-                                        + "postgrest.bat");
-				BufferedWriter out = new BufferedWriter (new OutputStreamWriter(new FileOutputStream(f,false)));
-					out.write(path + " --mode unattended" + " --superpassword " + contraseña1.getText() +
-							" --servicepassword "+contraseña2.getText() + " --serverport "+puertos.getSelectedItem()+
-							" --unattendedmodeui none --prefix "+ '"'+"C:\\Users\\noe\\Desktop\\JULIO\\postgrest"+'"'+
-							" --datadir " + '"'+"C:\\Users\\noe\\Desktop\\JULIO\\postgrest\\data"+'"');
-					out.close();
-			}catch(IOException eb){
-				
-			}
+                //Opcion Inicio
+                else if(e.getSource() == btnInicio){
+                    this.remove(paneles[posicion]);
+                    posicion = 0;
+                    add(paneles[posicion]);
+                        validate();
+                        repaint();
+                }
+                //Opcion crear .bat
+                else if( btnEnviar == e.getSource()){
+			
+                        try{
+                            f = new File("C:\\Users\\evd00\\Desktop\\Bueno\\postgres.bat");
+                            FileWriter w = new FileWriter(f);
+                            BufferedWriter bw = new BufferedWriter(w);
+                            PrintWriter wr = new PrintWriter(bw);  
+                            wr.write(ejecutable.getName());//escribimos el instalador
+                            wr.append(" --mode unattended"); //escribimos el modo
+                            wr.append(" --superpassword " + txtPassword.getText()); //escribimos super password
+                            wr.append(" --servicepassword " + txtRepassword.getText()); //escribimos service password
+                            wr.append(" --serverport "+txtPuerto.getText()); // escribimos puerto
+                            wr.append(" --unattendedmodeui none");
+                            wr.append(" --prefix ''"+txtDir1.getText()+"''"); //Ruta de instalacion
+                            wr.append(" --datadir ''"+txtDir2.getText()+"''"); //Ruta de datos
+                            wr.close();
+                            bw.close();
+                            JOptionPane.showMessageDialog(null,"Archivo creado correctamente");
+
+                         }catch(IOException ioe){}
+        
+                        
 		}
 		
 		//Con esto funciona el FileChooser
 		if(botonChooser == e.getSource()){
 			archivo = new JFileChooser();
 			archivo.showOpenDialog(null);
-			
-			
-			System.out.println(path);
+                        ejecutable = archivo.getSelectedFile();
+                        if(ejecutable != null)
+                            botonChooser.setText(ejecutable.getName());
+                        else
+                            botonChooser.setText("Examinar");
 			
 			
 		}
