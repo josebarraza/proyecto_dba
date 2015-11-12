@@ -134,11 +134,21 @@ public class Ventana extends JFrame implements ActionListener{
                             wr.append(" --servicepassword " + txtRepassword.getText()); //escribimos service password
                             wr.append(" --serverport "+txtPuerto.getText()); // escribimos puerto
                             wr.append(" --unattendedmodeui none");
-                            wr.append(" --prefix ''"+txtDir1.getText()+"''"); //Ruta de instalacion
-                            wr.append(" --datadir ''"+txtDir2.getText()+"''"); //Ruta de datos
+                            wr.append(" --prefix "+ '"' +txtDir1.getText()+'"'); //Ruta de instalacion
+                            wr.append(" --datadir "+ '"'+txtDir2.getText()+'"'); //Ruta de datos
                             wr.close();
                             bw.close();
-                            JOptionPane.showMessageDialog(null,"Archivo creado correctamente");
+                            JOptionPane.showMessageDialog(null,"Archivo creado correctamente, espere un momento para la instalación...");
+                            
+                            //Limpiamos 
+                            botonChooser.setText("Examinar");
+                            txtPassword.setText("");
+                            txtRepassword.setText("");
+                            txtPuerto.setText("");
+                            txtPuerto.setText("");
+                            txtDir1.setText("");
+                            txtDir2.setText("");
+                            
 
                          }catch(IOException ioe){}
         
